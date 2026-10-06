@@ -1,13 +1,13 @@
-# Nhật ký Sử dụng AI (AI Prompt Log) - HealthSync Project
+# Nhật ký Tương tác AI (AI Prompt Log) - FlashMart Project
 
-## Prompt 1: Tìm hiểu Anti-pattern trong trạng thái lịch hẹn
-* **User:** "Trong thiết kế cơ sở dữ liệu quan hệ, tại sao việc dùng một cột `is_active` (kiểu TINYINT/BOOLEAN) để theo dõi vòng đời của một Đơn hàng/Lịch hẹn lại là một thiết kế tồi (Anti-pattern)? Tôi nên thay thế bằng cấu trúc nào?"
-* **AI:** Giải thích rằng BOOLEAN chỉ đại diện cho 2 trạng thái bật/tắt, không thể mô tả tiến trình tuần tự phức tạp. Khuyên dùng kiểu `ENUM` hoặc tạo bảng riêng `AppointmentStatus` kết nối qua khóa ngoại.
+## Prompt 1: Tìm hiểu cơ chế mặc định của JOIN
+* **User:** "Trong cơ sở dữ liệu MySQL, mặc định từ khóa JOIN (khi không ghi rõ LEFT hay RIGHT) sẽ hoạt động như thế nào? Nó sẽ bỏ qua hay giữ lại các bản ghi không có sự trùng khớp ở cả hai bảng?"
+* **AI:** Giải thích từ khóa `JOIN` mặc định là `INNER JOIN`. Nó chỉ giữ lại các dòng có khóa trùng khớp ở cả 2 bảng và tự động loại bỏ các dòng không khớp (bản ghi không có giao dịch).
 
-## Prompt 2: Lựa chọn kiểu dữ liệu tài chính
-* **User:** "Khi thiết kế cột `deposit_amount` và `penalty_fee` trong MySQL phục vụ tính toán tài chính, tôi nên dùng kiểu dữ liệu FLOAT, DOUBLE hay DECIMAL? Tại sao?"
-* **AI:** Khuyên dùng `DECIMAL(12, 2)` để tránh sai số làm tròn số thực (Floating-point precision errors) của FLOAT/DOUBLE khi thực hiện các phép tính tiền tệ.
+## Prompt 2: Khác biệt giữa COUNT(*) và COUNT(column) khi LEFT JOIN
+* **User:** "Khi tôi sử dụng LEFT JOIN và đếm số lượng đơn hàng bằng hàm COUNT, tôi nên dùng COUNT(*) hay COUNT(tên_cột_khóa_chính_bảng_order)? Sự khác biệt khi kết quả trả về NULL là gì?"
+* **AI:** Phân tích `COUNT(*)` đếm số dòng làm cho đối tượng chưa có đơn hàng trả về 1, trong khi `COUNT(order_id)` bỏ qua giá trị NULL và trả về đúng số 0.
 
-## Prompt 3: Cú pháp ENUM trong MySQL
-* **User:** "Hãy cho tôi xem cú pháp chuẩn trong MySQL để thêm một cột status với kiểu dữ liệu ENUM chứa các giá trị ('PENDING', 'CONFIRMED', 'CHECKED_IN', 'COMPLETED', 'CANCELLED') vào một bảng có sẵn."
-* **AI:** Cung cấp câu lệnh `ALTER TABLE Appointments ADD COLUMN status ENUM(...) DEFAULT 'PENDING';`.
+## Prompt 3: Hiệu năng của Anti-Join
+* **User:** "Hãy phân tích hiệu năng (Performance) của việc dùng LEFT JOIN kết hợp IS NULL so với việc dùng subquery NOT IN khi muốn tìm kiếm các bản ghi không tồn tại trong bảng khác."
+* **AI:** Phân tích rằng `LEFT JOIN ... WHERE IS NULL` (Anti-Join) có hiệu năng tốt hơn `NOT IN` trên tập dữ liệu lớn, đặc biệt khi cột liên kết có thể chứa giá trị `NULL`.
